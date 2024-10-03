@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper;
 
 import com.github.gadini.checkpoint1.model.Produto;
 
-public class ProdutoResquestCreateDto {
+public class ProdutoRequestCreateDto {
 
 	private String nome;
 	private BigDecimal valor;
