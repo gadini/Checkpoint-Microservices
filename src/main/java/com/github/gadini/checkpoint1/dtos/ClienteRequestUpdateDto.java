@@ -17,8 +17,10 @@ public class ClienteRequestUpdateDto {
 	
 private static final ModelMapper modelMapper = new ModelMapper();
 	
-	public Cliente toModel() {
-        return modelMapper.map(this, Cliente.class);
+	public Cliente toModel(Long id) {
+        Cliente result =  modelMapper.map(this, Cliente.class);
+        result.setId(id);
+        return result;
     }
 
 	public String getBairro() {
