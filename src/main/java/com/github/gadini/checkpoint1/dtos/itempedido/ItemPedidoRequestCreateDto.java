@@ -6,27 +6,19 @@ import org.modelmapper.ModelMapper;
 
 import com.github.gadini.checkpoint1.model.ItemPedido;
 
-public class ItemPedidoResponseDto {
+public class ItemPedidoRequestCreateDto {
 
-	private Long id;
 	private Long id_pedido;
 	private Long id_cliente;
 	private Long quantidade;
 	private BigDecimal valor_total;
 	
 	private static final ModelMapper modelMapper = new ModelMapper();
-
-    public ItemPedidoResponseDto toDto(ItemPedido itemPedido){
-    	ItemPedidoResponseDto result = modelMapper.map(itemPedido, ItemPedidoResponseDto.class);
-        return result;
+	
+	public ItemPedido toModel() {
+        return modelMapper.map(this, ItemPedido.class);
     }
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public Long getId_pedido() {
 		return id_pedido;
 	}
