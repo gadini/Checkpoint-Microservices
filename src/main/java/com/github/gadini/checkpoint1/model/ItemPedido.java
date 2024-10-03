@@ -1,7 +1,6 @@
 package com.github.gadini.checkpoint1.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,23 +9,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Pedido {
+public class ItemPedido {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(nullable = false)
-	private LocalDate data_pedido;
-	
-	@Column(nullable = false)
-	private String forma_pagamento;
+	private Long id_pedido;
 	
 	@Column(nullable = false)
 	private Long id_cliente;
 	
 	@Column(nullable = false)
-	private String status;
+	private Long quantidade;
 	
 	@Column(nullable = false)
 	private BigDecimal valor_total;
@@ -39,20 +35,12 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public LocalDate getData_pedido() {
-		return data_pedido;
+	public Long getId_pedido() {
+		return id_pedido;
 	}
 
-	public void setData_pedido(LocalDate data_pedido) {
-		this.data_pedido = data_pedido;
-	}
-
-	public String getForma_pagamento() {
-		return forma_pagamento;
-	}
-
-	public void setForma_pagamento(String forma_pagamento) {
-		this.forma_pagamento = forma_pagamento;
+	public void setId_pedido(Long id_pedido) {
+		this.id_pedido = id_pedido;
 	}
 
 	public Long getId_cliente() {
@@ -63,12 +51,12 @@ public class Pedido {
 		this.id_cliente = id_cliente;
 	}
 
-	public String getStatus() {
-		return status;
+	public Long getQuantidade() {
+		return quantidade;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setQuantidade(Long quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	public BigDecimal getValor_total() {
@@ -80,4 +68,3 @@ public class Pedido {
 	}
 	
 }
-

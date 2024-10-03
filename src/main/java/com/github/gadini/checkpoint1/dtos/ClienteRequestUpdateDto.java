@@ -1,49 +1,27 @@
-package com.github.gadini.checkpoint1.model;
+package com.github.gadini.checkpoint1.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import org.modelmapper.ModelMapper;
 
-@Entity
-public class Cliente {
+import com.github.gadini.checkpoint1.model.Cliente;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class ClienteRequestUpdateDto {
 
-	@Column(nullable = false)
 	private String bairro;
-	
-	@Column(nullable = false)
 	private String cep;
-	
-	@Column(nullable = false)
 	private String complemento;
-	
-	@Column(nullable = false)
 	private String logradouro;
-	
-	@Column(nullable = false)
 	private String municipio;
-	
-	@Column(nullable = false)
 	private String nome;
-	
-	@Column(nullable = false)
 	private String numero;
-	
-	@Column(nullable = false)
 	private String uf;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
+private static final ModelMapper modelMapper = new ModelMapper();
+	
+	public Cliente toModel(Long id) {
+        Cliente result =  modelMapper.map(this, Cliente.class);
+        result.setId(id);
+        return result;
+    }
 
 	public String getBairro() {
 		return bairro;
