@@ -2,17 +2,18 @@ package com.github.gadini.checkpoint1.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.gadini.checkpoint1.model.Produto;
 import com.github.gadini.checkpoint1.repository.ProdutoRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
 
-	@Autowired
-	private ProdutoRepository ProdutoRepository;
+	private final ProdutoRepository ProdutoRepository;
 	
 	public java.util.List<Produto> list(){
         return ProdutoRepository.findAll();
