@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.gadini.checkpoint1.dtos.pedido.PedidoRequestCreateDto;
 import com.github.gadini.checkpoint1.dtos.pedido.PedidoRequestUpdateDto;
 import com.github.gadini.checkpoint1.dtos.pedido.PedidoResponseDto;
+import com.github.gadini.checkpoint1.mapper.PedidoMapper;
 import com.github.gadini.checkpoint1.service.PedidoService;
 
 @RestController
@@ -26,12 +27,15 @@ public class PedidoController {
 	@Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private PedidoMapper pedidoMapper;
+
     @GetMapping
     public ResponseEntity<List<PedidoResponseDto>> list(){
 
         List<PedidoResponseDto> dtos = pedidoService.list()
         .stream()
-        .map(e -> new PedidoResponseDto().toDto(e))
+        .map(e -> pedidoMapper.toDto(e))
         .toList();
 
         return ResponseEntity.ok().body(dtos);
@@ -40,7 +44,7 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoResponseDto> create(@RequestBody PedidoRequestCreateDto dto){
         return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new PedidoResponseDto().toDto(pedidoService.save(dto.toModel())));
+        .body(pedidoMapper.toDto(pedidoService.save(pedidoMapper.toModel(dto))));
     }
 
     @PutMapping("{id}")
@@ -50,7 +54,7 @@ public class PedidoController {
            throw new RuntimeException("Id inexistente");
         }
 
-        return ResponseEntity.ok().body(new PedidoResponseDto().toDto(pedidoService.save(dto.toModel(id))));
+        return ResponseEntity.ok().body(pedidoMapper.toDto(pedidoService.save(pedidoMapper.toModel(id, dto))));
     }
 
     @DeleteMapping("{id}")
@@ -66,7 +70,7 @@ public class PedidoController {
     @GetMapping("{id}")
     public ResponseEntity<PedidoResponseDto> findById(@PathVariable Long id){
 
-        return ResponseEntity.ok().body(pedidoService.findById(id).map(e -> new PedidoResponseDto().toDto(e))
+        return ResponseEntity.ok().body(pedidoService.findById(id).map(e -> pedidoMapper.toDto(e))
         .orElseThrow(() -> new RuntimeException("Produto inexistente")));
  
     }

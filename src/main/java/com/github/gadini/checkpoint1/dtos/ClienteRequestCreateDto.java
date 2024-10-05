@@ -1,9 +1,5 @@
 package com.github.gadini.checkpoint1.dtos;
 
-import org.modelmapper.ModelMapper;
-
-import com.github.gadini.checkpoint1.model.Cliente;
-
 public class ClienteRequestCreateDto {
 
 	private String bairro;
@@ -14,12 +10,6 @@ public class ClienteRequestCreateDto {
 	private String nome;
 	private String numero;
 	private String uf;
-	
-	private static final ModelMapper modelMapper = new ModelMapper();
-	
-	public Cliente toModel() {
-        return modelMapper.map(this, Cliente.class);
-    }
 
 	public String getBairro() {
 		return bairro;

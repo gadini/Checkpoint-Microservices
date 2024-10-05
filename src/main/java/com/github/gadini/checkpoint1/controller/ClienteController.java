@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.gadini.checkpoint1.dtos.ClienteRequestCreateDto;
 import com.github.gadini.checkpoint1.dtos.ClienteRequestUpdateDto;
 import com.github.gadini.checkpoint1.dtos.ClienteResponseDto;
+import com.github.gadini.checkpoint1.mapper.ClienteMapper;
 import com.github.gadini.checkpoint1.service.ClienteService;
 
 @RestController
@@ -25,13 +26,16 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
+
+    @Autowired
+    private ClienteMapper clienteMapper;
 	
 	@GetMapping
     public ResponseEntity<List<ClienteResponseDto>> list(){
 
         List<ClienteResponseDto> dtos = clienteService.list()
         .stream()
-        .map(e -> new ClienteResponseDto().toDto(e))
+        .map(e -> clienteMapper.toDto(e))
         .toList();
 
         return ResponseEntity.ok().body(dtos);
@@ -40,7 +44,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteResponseDto> create(@RequestBody ClienteRequestCreateDto dto){
         return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new ClienteResponseDto().toDto(clienteService.save(dto.toModel())));
+        .body(clienteMapper.toDto(clienteService.save(clienteMapper.toModel(dto))));
     }
 
     @PutMapping("{id}")
@@ -50,7 +54,7 @@ public class ClienteController {
            throw new RuntimeException("Id inexistente");
         }
 
-        return ResponseEntity.ok().body(new ClienteResponseDto().toDto(clienteService.save(dto.toModel(id))));
+        return ResponseEntity.ok().body(clienteMapper.toDto(clienteService.save(clienteMapper.toModel(id,dto))));
     }
 
     @DeleteMapping("{id}")
@@ -66,7 +70,7 @@ public class ClienteController {
     @GetMapping("{id}")
     public ResponseEntity<ClienteResponseDto> findById(@PathVariable Long id){
 
-        return ResponseEntity.ok().body(clienteService.findById(id).map(e -> new ClienteResponseDto().toDto(e))
+        return ResponseEntity.ok().body(clienteService.findById(id).map(e -> clienteMapper.toDto(e))
         .orElseThrow(() -> new RuntimeException("Produto inexistente")));
  
     }

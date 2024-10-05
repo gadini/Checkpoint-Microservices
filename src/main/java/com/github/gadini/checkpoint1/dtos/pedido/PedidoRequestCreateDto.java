@@ -3,10 +3,6 @@ package com.github.gadini.checkpoint1.dtos.pedido;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.modelmapper.ModelMapper;
-
-import com.github.gadini.checkpoint1.model.Pedido;
-
 public class PedidoRequestCreateDto {
 
 	private LocalDate data_pedido;
@@ -14,12 +10,6 @@ public class PedidoRequestCreateDto {
 	private Long id_cliente;
 	private String status;
 	private BigDecimal valor_total;
-	
-	private static final ModelMapper modelMapper = new ModelMapper();
-	
-	public Pedido toModel() {
-        return modelMapper.map(this, Pedido.class);
-    }
 	
 	public LocalDate getData_pedido() {
 		return data_pedido;

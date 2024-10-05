@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.gadini.checkpoint1.dtos.itempedido.ItemPedidoRequestCreateDto;
 import com.github.gadini.checkpoint1.dtos.itempedido.ItemPedidoRequestUpdateDto;
-import com.github.gadini.checkpoint1.dtos.itempedido.ItemPedidoResponseDto;
+import com.github.gadini.checkpoint1.dtos.itempedido.ProdutoResponseDto;
+import com.github.gadini.checkpoint1.mapper.ItemPedidoMapper;
 import com.github.gadini.checkpoint1.service.ItemPedidoService;
 
 @RestController
@@ -26,31 +27,34 @@ public class ItemPedidoController {
 	@Autowired
     private ItemPedidoService itemPedidoService;
 
-    @GetMapping
-    public ResponseEntity<List<ItemPedidoResponseDto>> list(){
+    @Autowired
+    private ItemPedidoMapper itemPedidoMapper;
 
-        List<ItemPedidoResponseDto> dtos = itemPedidoService.list()
+    @GetMapping
+    public ResponseEntity<List<ProdutoResponseDto>> list(){
+
+        List<ProdutoResponseDto> dtos = itemPedidoService.list()
         .stream()
-        .map(e -> new ItemPedidoResponseDto().toDto(e))
+        .map(e -> itemPedidoMapper.toDto(e))
         .toList();
 
         return ResponseEntity.ok().body(dtos);
     }
 
     @PostMapping
-    public ResponseEntity<ItemPedidoResponseDto> create(@RequestBody ItemPedidoRequestCreateDto dto){
+    public ResponseEntity<ProdutoResponseDto> create(@RequestBody ItemPedidoRequestCreateDto dto){
         return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new ItemPedidoResponseDto().toDto(itemPedidoService.save(dto.toModel())));
+        .body(itemPedidoMapper.toDto(itemPedidoService.save(itemPedidoMapper.toModel(dto))));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ItemPedidoResponseDto> update(@PathVariable Long id, @RequestBody ItemPedidoRequestUpdateDto dto){
+    public ResponseEntity<ProdutoResponseDto> update(@PathVariable Long id, @RequestBody ItemPedidoRequestUpdateDto dto){
         
         if(! itemPedidoService.existsById(id)){
            throw new RuntimeException("Id inexistente");
         }
 
-        return ResponseEntity.ok().body(new ItemPedidoResponseDto().toDto(itemPedidoService.save(dto.toModel(id))));
+        return ResponseEntity.ok().body(itemPedidoMapper.toDto(itemPedidoService.save(itemPedidoMapper.toModel(id,dto))));
     }
 
     @DeleteMapping("{id}")
@@ -64,9 +68,9 @@ public class ItemPedidoController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ItemPedidoResponseDto> findById(@PathVariable Long id){
+    public ResponseEntity<ProdutoResponseDto> findById(@PathVariable Long id){
 
-        return ResponseEntity.ok().body(itemPedidoService.findById(id).map(e -> new ItemPedidoResponseDto().toDto(e))
+        return ResponseEntity.ok().body(itemPedidoService.findById(id).map(e -> itemPedidoMapper.toDto(e))
         .orElseThrow(() -> new RuntimeException("Produto inexistente")));
  
     }

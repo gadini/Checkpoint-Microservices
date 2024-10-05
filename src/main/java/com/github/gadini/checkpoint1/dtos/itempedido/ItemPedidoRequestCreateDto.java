@@ -2,22 +2,12 @@ package com.github.gadini.checkpoint1.dtos.itempedido;
 
 import java.math.BigDecimal;
 
-import org.modelmapper.ModelMapper;
-
-import com.github.gadini.checkpoint1.model.ItemPedido;
-
 public class ItemPedidoRequestCreateDto {
 
 	private Long id_pedido;
 	private Long id_cliente;
 	private Long quantidade;
 	private BigDecimal valor_total;
-	
-	private static final ModelMapper modelMapper = new ModelMapper();
-	
-	public ItemPedido toModel() {
-        return modelMapper.map(this, ItemPedido.class);
-    }
 	
 	public Long getId_pedido() {
 		return id_pedido;

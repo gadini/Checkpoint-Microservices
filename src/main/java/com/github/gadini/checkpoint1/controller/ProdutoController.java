@@ -17,21 +17,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.gadini.checkpoint1.dtos.produto.ProdutoRequestCreateDto;
 import com.github.gadini.checkpoint1.dtos.produto.ProdutoRequestUpdateDto;
 import com.github.gadini.checkpoint1.dtos.produto.ProdutoResponseDto;
+import com.github.gadini.checkpoint1.mapper.ProdutoMapper;
 import com.github.gadini.checkpoint1.service.ProdutoService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/produtos")
+@RequiredArgsConstructor
 public class ProdutoController {
 
-	@Autowired
-	private ProdutoService produtoService;
+	private final ProdutoService produtoService;
 	
+    private final ProdutoMapper produtoMapper;
+
 	@GetMapping
     public ResponseEntity<List<ProdutoResponseDto>> list(){
 
         List<ProdutoResponseDto> dtos = produtoService.list()
         .stream()
-        .map(e -> new ProdutoResponseDto().toDto(e))
+        .map(e -> produtoMapper.toDto(e))
         .toList();
 
         return ResponseEntity.ok().body(dtos);
@@ -40,7 +45,7 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<ProdutoResponseDto> create(@RequestBody ProdutoRequestCreateDto dto){
         return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new ProdutoResponseDto().toDto(produtoService.save(dto.toModel())));
+        .body(produtoMapper.toDto(produtoService.save(produtoMapper.toModel(dto))));
     }
 
     @PutMapping("{id}")
@@ -50,7 +55,7 @@ public class ProdutoController {
            throw new RuntimeException("Id inexistente");
         }
 
-        return ResponseEntity.ok().body(new ProdutoResponseDto().toDto(produtoService.save(dto.toModel(id))));
+        return ResponseEntity.ok().body(produtoMapper.toDto(produtoService.save(produtoMapper.toModel(id,dto))));
     }
 
     @DeleteMapping("{id}")
@@ -66,7 +71,7 @@ public class ProdutoController {
     @GetMapping("{id}")
     public ResponseEntity<ProdutoResponseDto> findById(@PathVariable Long id){
 
-        return ResponseEntity.ok().body(produtoService.findById(id).map(e -> new ProdutoResponseDto().toDto(e))
+        return ResponseEntity.ok().body(produtoService.findById(id).map(e -> produtoMapper.toDto(e))
         .orElseThrow(() -> new RuntimeException("Produto inexistente")));
  
     }
